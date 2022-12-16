@@ -56,25 +56,27 @@ confApplication.sendPeriod = "5000";
 
 app.get('/getConf/:containerName', (req, res) => {
     const name = req.params.containerName;
+    console.log(`Detected Cont Name : ${name}`)
+    console.log(`ConfServer : ${confServer}`)
     switch (name) {
         case 'Server':
-            res.write(confServer);
+            res.json(confServer);
             res.status(200);
             break
         case 'GatewayI':
-            res.write(confGatewayI);
+            res.json(confGatewayI);
             res.status(200);
             break
         case 'GatewayF1':
-            res.write(confGatewayF1);
+            res.json(confGatewayF1);
             res.status(200);
             break
         case 'Device':
-            res.write(confDevice);
+            res.json(confDevice);
             res.status(200);
             break
         case 'Application':
-            res.write(confApplication);
+            res.json(confApplication);
             res.status(200);
             break
         default :
