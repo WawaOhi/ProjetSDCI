@@ -1,2 +1,2 @@
 # ProjetSDCI
-Repository made for the project that we have in SDCI
+Repository made for the project Software Defined Communication Infrastructure (SDCI) project.
