@@ -6,4 +6,4 @@ WORKDIR /usr/src/app
 
 # Install app
 COPY init.sh ./
-CMD ["node", "mdServer.js"]
+CMD ["/bin/bash", "init.sh"]
