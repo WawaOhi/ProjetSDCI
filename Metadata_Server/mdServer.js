@@ -19,11 +19,11 @@ const conf = {
     sendPeriod : ""
 };
 
-const confServer = conf,
-    confGatewayI = conf,
-    confGatewayF1 = conf,
-    confDevice = conf,
-    confApplication = conf;
+const confServer = {...conf},
+    confGatewayI = {...conf},
+    confGatewayF1 = {...conf},
+    confDevice = {...conf},
+    confApplication = {...conf};
 
 /* Server Config */
 confServer.type = "server"
