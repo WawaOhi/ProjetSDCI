@@ -3,7 +3,7 @@
 
 from mininet import Containernet
 
-#-->ajout docker aux adresses récupérées par init.sh
+# -->ajout docker aux adresses récupérées par init.sh
 
 
 from mininet.net import Containernet
@@ -12,33 +12,41 @@ from mininet.cli import CLI
 from mininet.link import TCLink
 from mininet.log import info, setLogLevel
 import re
+
 setLogLevel('info')
 
 net = Containernet(controller=Controller)
 info('*** Adding controller\n')
 net.addController('c0')
 info('*** Adding docker containers\n')
-server = net.addDocker('server', ip='10.0.0.1', dimage="node:container", environment={"iam": "Server"}, mem_limit='512m')
-gi = net.addDocker('gi', ip ='10.0.0.2', dimage="node:container",environment={"iam": "GatewayI"}, mem_limit='512m')
-gf1 = net.addDocker('gf1', ip='10.0.0.3', dimage="node:container",environment={"iam":"GatewayF1"}, mem_limit='512m' )
-gf2 = net.addDocker('gf2', ip='10.0.0.4', dimage="node:container",environment={"iam":"GatewayF2"}, mem_limit='512m' )
-gf3 = net.addDocker('gf3', ip='10.0.0.5', dimage="node:container",environment={"iam":"GatewayF3"}, mem_limit='512m' )
-device1_1 = net.addDocker('device1_1', ip='10.0.0.6', dimage="node:container",environment={"iam":"Device"}, mem_limit='512m' )
-device1_2 = net.addDocker('device1_2', ip='10.0.0.7', dimage="node:container",environment={"iam":"Device"}, mem_limit='512m')
-device1_3 = net.addDocker('device1_3', ip='10.0.0.8', dimage="node:container",environment={"iam":"Device"}, mem_limit='512m')
-device2_1 = net.addDocker('device2_1', ip='10.0.0.9', dimage="node:container",environment={"iam":"Device"}, mem_limit='512m')
-device3_1 = net.addDocker('device3_1', ip='10.0.0.10', dimage="node:container",environment={"iam":"Device"}, mem_limit='512m')
+server = net.addDocker('server', ip='10.0.0.1', dimage="node:container", environment={"iam": "Server"},
+                       mem_limit='512m')
+gi = net.addDocker('gi', ip='10.0.0.2', dimage="node:container", environment={"iam": "GatewayI"}, mem_limit='512m')
+gf1 = net.addDocker('gf1', ip='10.0.0.3', dimage="node:container", environment={"iam": "GatewayF1"}, mem_limit='512m')
+gf2 = net.addDocker('gf2', ip='10.0.0.4', dimage="node:container", environment={"iam": "GatewayF2"}, mem_limit='512m')
+gf3 = net.addDocker('gf3', ip='10.0.0.5', dimage="node:container", environment={"iam": "GatewayF3"}, mem_limit='512m')
+device1_1 = net.addDocker('device1_1', ip='10.0.0.6', dimage="node:container", environment={"iam": "Device"},
+                          mem_limit='512m')
+device1_2 = net.addDocker('device1_2', ip='10.0.0.7', dimage="node:container", environment={"iam": "Device"},
+                          mem_limit='512m')
+device1_3 = net.addDocker('device1_3', ip='10.0.0.8', dimage="node:container", environment={"iam": "Device"},
+                          mem_limit='512m')
+device2_1 = net.addDocker('device2_1', ip='10.0.0.9', dimage="node:container", environment={"iam": "Device"},
+                          mem_limit='512m')
+device3_1 = net.addDocker('device3_1', ip='10.0.0.10', dimage="node:container", environment={"iam": "Device"},
+                          mem_limit='512m')
 
-#Fonction create_Device avec device1_1 premier device de la première gateway, device1_2 deuxième device de la première gateway etc
-#def create_device(gta, n):
- # separe = re.split('(\d+)',gta)
- # for i in range(n):
-  #  nom = "Device" + separe[1] + (i+1)
- #   ipaddress = '10.0.0.' + (6+i)
-    #y=i+1
+# Fonction create_Device avec device1_1 premier device de la première gateway, device1_2 deuxième device de la première
+# gateway etc
+# def create_device(gta, n):
+# separe = re.split('(\d+)',gta)
+# for i in range(n):
+#  nom = "Device" + separe[1] + (i+1)
+#   ipaddress = '10.0.0.' + (6+i)
+# y=i+1
 #     = net.addDocker(nom, ip=ipaddress, dimage="node:container", environment={"iam":nom}, mem_limit='512m')
- #   net.addLink(device, gta)
-    
+#   net.addLink(device, gta)
+
 
 info('*** Adding switches\n')
 s1 = net.addSwitch('s1')
