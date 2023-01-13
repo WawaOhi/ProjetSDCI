@@ -25,15 +25,15 @@ gi = net.addDocker('gi', ip='10.0.0.2', dimage="node:container", environment={"i
 gf1 = net.addDocker('gf1', ip='10.0.0.3', dimage="node:container", environment={"iam": "GatewayF1"}, mem_limit='512m')
 gf2 = net.addDocker('gf2', ip='10.0.0.4', dimage="node:container", environment={"iam": "GatewayF2"}, mem_limit='512m')
 gf3 = net.addDocker('gf3', ip='10.0.0.5', dimage="node:container", environment={"iam": "GatewayF3"}, mem_limit='512m')
-device1_1 = net.addDocker('device1_1', ip='10.0.0.6', dimage="node:container", environment={"iam": "Device"},
+device1_1 = net.addDocker('device1_1', ip='10.0.0.6', dimage="node:container", environment={"iam": "Device1_1"},
                           mem_limit='512m')
-device1_2 = net.addDocker('device1_2', ip='10.0.0.7', dimage="node:container", environment={"iam": "Device"},
+device1_2 = net.addDocker('device1_2', ip='10.0.0.7', dimage="node:container", environment={"iam": "Device1_2"},
                           mem_limit='512m')
-device1_3 = net.addDocker('device1_3', ip='10.0.0.8', dimage="node:container", environment={"iam": "Device"},
+device1_3 = net.addDocker('device1_3', ip='10.0.0.8', dimage="node:container", environment={"iam": "Device1_3"},
                           mem_limit='512m')
-device2_1 = net.addDocker('device2_1', ip='10.0.0.9', dimage="node:container", environment={"iam": "Device"},
+device2_1 = net.addDocker('device2_1', ip='10.0.0.9', dimage="node:container", environment={"iam": "Device2_1"},
                           mem_limit='512m')
-device3_1 = net.addDocker('device3_1', ip='10.0.0.10', dimage="node:container", environment={"iam": "Device"},
+device3_1 = net.addDocker('device3_1', ip='10.0.0.10', dimage="node:container", environment={"iam": "Device3_1"},
                           mem_limit='512m')
 
 # Fonction create_Device avec device1_1 premier device de la première gateway, device1_2 deuxième device de la première
