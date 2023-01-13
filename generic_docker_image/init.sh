@@ -1,12 +1,7 @@
 #!/bin/sh 
 
-if [ -z "$1" ]; then 
-	echo "Erreur : aucun nom de fichier n'à été donné en entrée."
-	exit 1
-fi
-
 # Retrieve the json and store it in a json file
-curl lelienversleserver/$iam> $iam.json
+curl http://172.17.0.2/getConf/$iam> $iam.json
 
 
 case $iam in 
