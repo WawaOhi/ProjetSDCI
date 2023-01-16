@@ -11,11 +11,13 @@ from mininet.node import Controller
 from mininet.cli import CLI
 from mininet.link import TCLink
 from mininet.log import info, setLogLevel
+from emuvim.dcemulator.net import DCNetwork
+from emuvim.api.tango import TangoLLCMEndpoint
 import re
 
 setLogLevel('info')
 
-net = Containernet(controller=Controller)
+net = DCNetwork(monitor=False, enable_learning=True)
 info('*** Adding controller\n')
 net.addController('c0')
 info('*** Adding docker containers\n')
@@ -34,7 +36,17 @@ device1_3 = net.addDocker('device1_3', ip='10.0.0.8', dimage="node:container", e
 device2_1 = net.addDocker('device2_1', ip='10.0.0.9', dimage="node:container", environment={"iam": "Device2_1"},
                           mem_limit='512m')
 device3_1 = net.addDocker('device3_1', ip='10.0.0.10', dimage="node:container", environment={"iam": "Device3_1"},
+
+
                           mem_limit='512m')
+
+#add datacenter
+datacenter = net.addDatacenter("dc1")
+#ajout  5GTANGO life cycle manager (optionnel)
+llcm1 = TangoLLCMEndpoint("0.0.0.0", 5000, deploy_sap=False)
+llcm1.connectDatacenter(dc1)
+# run the dummy gatekeeper (in another thread, don't block)
+llcm1.start()
 
 # Fonction create_Device avec device1_1 premier device de la première gateway, device1_2 deuxième device de la première
 # gateway etc
@@ -66,4 +78,11 @@ net.addLink(device1_2, gf1)
 net.addLink(device1_3, gf1)
 net.addLink(device2_1, gf2)
 net.addLink(device3_1, gf3)
+net.addLink(dc1, s3) 
+
 info('*** Starting network\n')
+
+net.start()
+net.CLI()
+net.stop()
+
