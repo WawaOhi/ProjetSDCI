@@ -30,8 +30,11 @@ case $type in
     device)
         node device.js --local_ip $localIp --local_port $localPort --local_name $localName --remote_ip $remoteIp --remote_port $remotePort --remote_name $remoteName --send_period $sendPeriod
         ;;
-    *)
+    application)
         node application.js --remote_ip $localIp --remote_port $remotePort --device_name $localName --send_period $sendPeriod
+        ;;
+    *)
+        exit 1
         ;;
 esac
 

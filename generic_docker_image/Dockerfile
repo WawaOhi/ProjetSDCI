@@ -5,5 +5,5 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 # Install app
-COPY init.sh ./
+COPY ./init.sh  ./
 CMD ["/bin/bash", "init.sh"]
