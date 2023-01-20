@@ -12,7 +12,7 @@ RUN apt-get update -y\
     && apt-get install jq -y
 RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - \
-    && apt-get install nodejs -yq\    
+    && apt-get install nodejs -yq\
     && npm init -y\ 
     && npm install express \
     && npm install systeminformation \
