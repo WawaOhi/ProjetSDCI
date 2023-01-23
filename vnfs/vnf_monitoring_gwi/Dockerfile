@@ -16,6 +16,6 @@
 FROM python:latest
 COPY monitoring.py app/
 WORKDIR /app
-RUN pip install Flask APScheduler
+RUN pip install Flask APScheduler requests
 EXPOSE 5000
 ENTRYPOINT ["python3", "monitoring.py"]
