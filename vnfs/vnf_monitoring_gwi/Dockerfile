@@ -13,9 +13,14 @@
 ## CMD should always point to /bin/bash to not block the emulator
 #CMD /bin/bash
 
-FROM python:latest
+FROM python:3.7-slim-buster
 COPY monitoring.py app/
 WORKDIR /app
+
+RUN	apt-get update && apt-get install -y \
+	net-tools \
+    iputils-ping \
+	iproute
 RUN pip install Flask APScheduler requests
 EXPOSE 5000
 ENTRYPOINT ["python3", "monitoring.py"]
