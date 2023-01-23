@@ -1,0 +1,18 @@
+name: monitoring TODO
+#description: Load balancer for web servers TODO
+#provider: INSA TODO
+nfvo_version: 5.0.0
+vim_types:
+  - docker
+image:
+  upload: "false"
+  names:
+#        - "nom_image:nom_tag"  TODO
+image-config:
+  #    name: "nom_image:nom_tag" TODO
+  diskFormat: QCOW2
+  containerFormat: BARE
+  minCPU: 0
+  minDisk: 0
+  minRam: 0
+  isPublic: false

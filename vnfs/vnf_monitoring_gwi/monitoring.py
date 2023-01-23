@@ -6,7 +6,7 @@ import time
 
 app = Flask(__name__)
 
-GWI_IP = '127.0.0.1'
+GWI_IP = '10.0.0.2'
 
 MAX_LEN_STATES_DEQUE = 15
 MAX_LEN_PING_DEQUE = 15
@@ -43,6 +43,7 @@ def provide_ping(list_len: int):
 
 @app.route("/all")
 def provide_all():
+
     return 'PING'
 
 
