@@ -5,8 +5,8 @@ import statistics
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 
-from MANO_API.MANO_API_utils import deploy_vnf, test_vnf_deployment
-from SDNctrl_API.SDNctrl_API_utils import redirect_traffic
+from MANO_API.MANO_API_utils import deploy_vnf, test_vnf_deployment, delete_vnf
+from SDNctrl_API.SDNctrl_API_utils import redirect_traffic, undo_redirect_traffic
 
 
 def check_gi_ping(vnf_monitoring_IP_port: str = 'localhost:5000', req_timeout: int = 1) -> float:
@@ -52,12 +52,21 @@ def check_gi_states(vnf_monitoring_IP_port: str = 'localhost:5000', req_timeout:
 
 
 def deploy_vnf_adapt():
-    vnf_is_deployed = False
-    # TODO add counter
+    vnf_is_deployed = test_vnf_deployment(vnf_name='vnf_adapt')
+    # TODO add counter to avoid infinite loops
     while not vnf_is_deployed:
         deploy_vnf(vnf_name='vnf_adapt', vnf_img_name='vnf:adaptation', vnf_ip_output='10.0.0.21/24')
         vnf_is_deployed = test_vnf_deployment(vnf_name='vnf_adapt')
     redirect_traffic()
+
+
+def shutdown_vnf_adapt():
+    vnf_is_deployed = test_vnf_deployment(vnf_name='vnf_adapt')
+    # TODO add counter to avoid infinite loops
+    while vnf_is_deployed:
+        delete_vnf(vnf_name='vnf_adapt')
+        vnf_is_deployed = test_vnf_deployment(vnf_name='vnf_adapt')
+    undo_redirect_traffic()
 
 
 def main_monitor_adapt(avg_load_threshold: float = 0.9, avg_elapsed_time_threshold: float = 1):
@@ -66,6 +75,8 @@ def main_monitor_adapt(avg_load_threshold: float = 0.9, avg_elapsed_time_thresho
     avg_load = check_gi_states()
     if (avg_elapsed_time > avg_elapsed_time_threshold) or (avg_load_threshold > avg_load_threshold):
         deploy_vnf_adapt()
+    else:
+        shutdown_vnf_adapt()
     # TODO shutdown vnf if going back to normal
     print(f'')
 

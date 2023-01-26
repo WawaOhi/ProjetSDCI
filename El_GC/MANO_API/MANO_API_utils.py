@@ -38,10 +38,15 @@ def deploy_vnf(
 def test_vnf_deployment(
         vnf_name: str,
         datacenter_name: str = 'dc1') -> bool:
-    headers = {
-        'Content-Type': 'application/json',
-    }
     my_url = BASE_URL + 'compute/' + datacenter_name + '/' + vnf_name
-    r = requests.get(my_url, headers=headers)
+    r = requests.get(my_url)
     vnf_is_deployed = r.json().get('state').get('Running')
     return vnf_is_deployed
+
+
+def delete_vnf(
+        vnf_name: str,
+        datacenter_name: str = 'dc1'):
+    my_url = BASE_URL + 'compute/' + datacenter_name + '/' + vnf_name
+    r = requests.delete(my_url)
+    return r
