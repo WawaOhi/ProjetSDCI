@@ -13,17 +13,17 @@ GWI_URL = 'http://' + GWI_IP + ':' + GWI_PORT
 
 MAX_LEN_STATES_DEQUE = 15
 MAX_LEN_PING_DEQUE = 15
-COLLECT_STATES_FREQ_S = 1
-COLLECT_PING_FREQ_S = 15
-STATE_REQ_TIMEOUT = 0.5
-PING_REQ_TIMEOUT = 0.5
+COLLECT_STATES_FREQ_S = 2
+COLLECT_PING_FREQ_S = 2
+STATE_REQ_TIMEOUT = 1
+PING_REQ_TIMEOUT = 1
 
 states = collections.deque([], maxlen=MAX_LEN_STATES_DEQUE)
 pings = collections.deque([], maxlen=MAX_LEN_PING_DEQUE)
 
 
-@app.route("/state", defaults={'list_len': MAX_LEN_STATES_DEQUE})
-@app.route("/state/<int:list_len>")
+@app.route("/states", defaults={'list_len': MAX_LEN_STATES_DEQUE})
+@app.route("/states/<int:list_len>")
 def provide_state(list_len: int):
     # Avoid out of bounds
     if list_len > MAX_LEN_STATES_DEQUE:
@@ -32,8 +32,8 @@ def provide_state(list_len: int):
     return list(states)[-list_len:]
 
 
-@app.route("/ping", defaults={'list_len': MAX_LEN_STATES_DEQUE})
-@app.route("/ping/<int:list_len>")
+@app.route("/pings", defaults={'list_len': MAX_LEN_STATES_DEQUE})
+@app.route("/pings/<int:list_len>")
 def provide_ping(list_len: int):
     # Avoid out of bounds
     if list_len > MAX_LEN_PING_DEQUE:
@@ -48,40 +48,38 @@ def provide_all():
 
 
 def collect_state():
+    # Add timestamp to dict containing response
+    state = {'state_req_send_timestamp': time.time()}
     try:
         r = requests.get(GWI_URL + '/health', timeout=STATE_REQ_TIMEOUT)
-        state = [r.json()]
+        state.update(r.json())
+        state.update({'state_req_elapsed_time_s': r.elapsed.total_seconds()})
     except requests.exceptions.Timeout:
-        state = [{'error': 'timeout'}]
+        state.update({'error': f'timeout after {STATE_REQ_TIMEOUT}s'})
     except requests.exceptions.TooManyRedirects:
-        state = [{'error': 'badURL'}]
+        state.update({'error': 'badURL'})
     except requests.exceptions.RequestException as e:
         raise SystemExit(e)
-
-    state.append({'timestamp': time.time()})
-    current_time = time.strftime("%H:%M:%S", time.localtime())
-    print(f'Health request at {current_time} gave state {state}')
-
     states.append(state)
 
-    print(f'STATES: {list(states)}')
+    print(f'Health request gave state: {state}')
+    print(f'STATES: {states}')
 
 
 def collect_ping():
+    ping = {'req_send_timestamp': time.time()}
     try:
         r = requests.get(GWI_URL + '/ping', timeout=PING_REQ_TIMEOUT)
-        ping = r.json()
+        ping.update(r.json())
+        ping.update({'ping_req_elapsed_time_s': r.elapsed.total_seconds()})
     except requests.exceptions.Timeout:
-        ping = [{'error': 'timeout'}]
+        ping.update({'error': f'timeout after {PING_REQ_TIMEOUT}s'})
     except requests.exceptions.TooManyRedirects:
-        ping = [{'error': 'badURL'}]
+        ping.update({'error': 'badURL'})
     except requests.exceptions.RequestException as e:
         raise SystemExit(e)
 
-    ping.append({'timestamp': time.time()})
-
-    current_time = time.strftime("%H:%M:%S", time.localtime())
-    print(f'Ping request at {current_time} gave ping {ping}')
+    print(f'Ping request gave ping: {ping}')
 
     pings.append(ping)
     print(f'Pings: {pings}')
