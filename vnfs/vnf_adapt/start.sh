@@ -1,0 +1,1 @@
+curl -X PUT http://127.0.0.1:5001/restapi/compute/dc1/vnf_adapt -H 'Content-Type: application/json' -d '{"image":"vnf:adaptation", "network":"(id=input,ip=10.0.0.31/24)"}'

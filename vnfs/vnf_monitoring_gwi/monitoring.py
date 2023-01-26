@@ -50,7 +50,7 @@ def provide_all():
 def collect_state():
     try:
         r = requests.get(GWI_URL + '/health', timeout=STATE_REQ_TIMEOUT)
-        state = r.json()
+        state = [r.json()]
     except requests.exceptions.Timeout:
         state = [{'error': 'timeout'}]
     except requests.exceptions.TooManyRedirects:
@@ -94,4 +94,4 @@ collect_ping_job = scheduler.add_job(collect_ping, 'interval', seconds=COLLECT_P
 scheduler.start()
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0')
