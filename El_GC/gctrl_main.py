@@ -80,6 +80,21 @@ def shutdown_vnf_adapt():
             print('VNF was successfully shut down !')
 
 
+def deploy_vnf_monitoring():
+    vnf_is_deployed = test_vnf_deployment(vnf_name='vnf_moni')
+    max_tries = 5
+    counter = 0
+    while (not vnf_is_deployed) and (counter < max_tries):
+        counter += 1
+        deploy_vnf(vnf_name='vnf_moni', vnf_img_name='vnf:monitoring', vnf_ip_output='10.0.0.20/24')
+        vnf_is_deployed = test_vnf_deployment(vnf_name='vnf_moni')
+        if vnf_is_deployed:
+            print('VNF successfully deployed !')
+            redirect_traffic()
+        else:
+            print('Error while deploying vnf :(')
+
+
 def main_monitor_adapt(avg_load_threshold: float = 0.9, avg_elapsed_time_threshold: float = 1):
     print('We are in main_monitor! The time is: %s' % datetime.now())
     avg_elapsed_time = check_gi_ping()
@@ -99,6 +114,9 @@ def main_monitor_adapt(avg_load_threshold: float = 0.9, avg_elapsed_time_thresho
 if __name__ == '__main__':
     print('Welcome ! This is our wonderful General Controller. He monitors (almost) everything !')
     print('Press Ctrl+{0} to exit'.format('Break' if os.name == 'nt' else 'C'))
+    print('Deploying monitoring VNF...')
+    deploy_vnf_monitoring()
+
     scheduler = BlockingScheduler()
     # Main monitor runs every 3 seconds
     scheduler.add_job(main_monitor_adapt(), 'interval', seconds=3)
