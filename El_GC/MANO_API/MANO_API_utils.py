@@ -53,7 +53,7 @@ def test_vnf_deployment(
         print(f'DEBUG')
         r_json = r.json()
         print(f'DEBUG{r_json}')
-        if isinstance(r_json, dict):
+        if r_json:
             return r_json.get('state', None).get('Running', False)
         else:
             return False
