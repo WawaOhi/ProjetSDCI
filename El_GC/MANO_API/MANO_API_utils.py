@@ -50,7 +50,9 @@ def test_vnf_deployment(
     my_url = BASE_URL + 'compute/' + datacenter_name + '/' + vnf_name
     try:
         r = requests.get(my_url)
-        vnf_is_deployed = r.json().get('state').get('Running')
+        r_json = r.json()
+        print(f'DEBUG {r_json}')
+        vnf_is_deployed = r_json.get('state').get('Running')
         return vnf_is_deployed
     except requests.exceptions.Timeout:
         print(f'ERROR: timeout during deploy request')
