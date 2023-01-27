@@ -67,10 +67,12 @@ def deploy_vnf_adapt():
 
 
 def shutdown_vnf_adapt():
+    print('Testing vnf adapt State...')
     vnf_is_deployed = test_vnf_deployment(vnf_name='vnf_adapt')
     max_tries = 5
     counter = 0
     while vnf_is_deployed and (counter < max_tries):
+        print('Vnf is not down ! Shutting down...')
         delete_vnf(vnf_name='vnf_adapt')
         vnf_is_deployed = test_vnf_deployment(vnf_name='vnf_adapt')
         if vnf_is_deployed:
