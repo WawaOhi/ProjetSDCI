@@ -14,7 +14,6 @@ def check_gi_ping(vnf_monitoring_IP_port: str = 'localhost:5000', req_timeout: i
         r = requests.get('http://' + vnf_monitoring_IP_port + '/pings/10', timeout=req_timeout)
         elapsed_times = []
         for ping in list(r.json()):
-            print(f'PING WAS{ping}')
             time = ping.get('ping_req_elapsed_time_s', 1)
             elapsed_times.append(time)
         avg_elapsed_time = statistics.mean(elapsed_times)
