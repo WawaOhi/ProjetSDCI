@@ -128,6 +128,3 @@ def redirect_traffic():
 def undo_redirect_traffic():
     print('TODO Go back to normal traffic')
     return 0
-
-
-response = requests.post('http://localhost:8080/stats/flowentry/add', headers=headers, data=data)
