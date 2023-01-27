@@ -51,10 +51,8 @@ def test_vnf_deployment(
     try:
         r = requests.get(my_url)
         r_json = r.json()
-        print(f'DEBUG {r_json}')
-        vnf_is_deployed = r_json.get('state', None)
-        if vnf_is_deployed:
-            return vnf_is_deployed.get('Running', False)
+        if r_json:
+            return r_json.get('state', None).get('Running', False)
         else:
             return False
 
