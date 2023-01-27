@@ -54,24 +54,31 @@ def check_gi_states(vnf_monitoring_IP_port: str = 'localhost:5000', req_timeout:
 
 def deploy_vnf_adapt():
     vnf_is_deployed = test_vnf_deployment(vnf_name='vnf_adapt')
-    # TODO add counter to avoid infinite loops
-    while not vnf_is_deployed:
+    max_tries = 5
+    counter = 0
+    while (not vnf_is_deployed) and (counter < max_tries):
+        counter += 1
         deploy_vnf(vnf_name='vnf_adapt', vnf_img_name='vnf:adaptation', vnf_ip_output='10.0.0.21/24')
         vnf_is_deployed = test_vnf_deployment(vnf_name='vnf_adapt')
         if vnf_is_deployed:
             print('VNF successfully deployed !')
-    redirect_traffic()
+            redirect_traffic()
+        else:
+            print('Error while deploying vnf :(')
 
 
 def shutdown_vnf_adapt():
     vnf_is_deployed = test_vnf_deployment(vnf_name='vnf_adapt')
-    # TODO add counter to avoid infinite loops
-    while vnf_is_deployed:
+    max_tries = 5
+    counter = 0
+    while vnf_is_deployed and (counter < max_tries):
         delete_vnf(vnf_name='vnf_adapt')
         vnf_is_deployed = test_vnf_deployment(vnf_name='vnf_adapt')
-        if not vnf_is_deployed:
+        if vnf_is_deployed:
+            print('Error while shutting down vnf :(')
+            undo_redirect_traffic()
+        else:
             print('VNF was successfully shut down !')
-    undo_redirect_traffic()
 
 
 def main_monitor_adapt(avg_load_threshold: float = 0.9, avg_elapsed_time_threshold: float = 1):
