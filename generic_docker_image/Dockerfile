@@ -9,6 +9,8 @@ WORKDIR /usr/src/app
 RUN apt-get update -y\
     && apt-get upgrade -y\
     && apt-get install curl -y\
+    && apt-get install wget -y\
+    && apt-get install tcpdump -y\
     && apt-get install jq -y
 RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - \
