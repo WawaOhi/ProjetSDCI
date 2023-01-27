@@ -73,8 +73,7 @@ def shutdown_vnf_adapt():
     while vnf_is_deployed and (counter < max_tries):
         delete_vnf(vnf_name='vnf_adapt')
         vnf_is_deployed = test_vnf_deployment(vnf_name='vnf_adapt')
-        if True:
-        # if vnf_is_deployed:
+        if vnf_is_deployed:
             print('Error while shutting down vnf :(')
             undo_redirect_traffic()
         else:

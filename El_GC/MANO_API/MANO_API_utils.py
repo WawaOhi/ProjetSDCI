@@ -51,12 +51,11 @@ def test_vnf_deployment(
     try:
         r = requests.get(my_url)
         r_json = r.json()
-        return True
-        # print(r_json)
-        # if isinstance(r_json, dict):
-        #     return r_json.get('state', None).get('Running', False)
-        # else:
-        #     return False
+        print(r_json)
+        if isinstance(r_json, dict):
+            return r_json.get('state', None).get('Running', False)
+        else:
+            return False
 
     except requests.exceptions.Timeout:
         print(f'ERROR: timeout during deploy request')
