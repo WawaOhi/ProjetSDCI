@@ -9,7 +9,7 @@ from MANO_API.MANO_API_utils import deploy_vnf, test_vnf_deployment, delete_vnf
 from SDNctrl_API.SDNctrl_API_utils import redirect_traffic, undo_redirect_traffic
 
 
-def check_gi_ping(vnf_monitoring_IP_port: str = 'localhost:32806', req_timeout: int = 1) -> float:
+def check_gi_ping(vnf_monitoring_IP_port: str = 'localhost:32807', req_timeout: int = 1) -> float:
     try:
         r = requests.get('http://' + vnf_monitoring_IP_port + '/pings/10', timeout=req_timeout)
         elapsed_times = []
@@ -30,7 +30,7 @@ def check_gi_ping(vnf_monitoring_IP_port: str = 'localhost:32806', req_timeout: 
         raise SystemExit(e)
 
 
-def check_gi_states(vnf_monitoring_IP_port: str = 'localhost:32806', req_timeout: int = 1) -> float:
+def check_gi_states(vnf_monitoring_IP_port: str = 'localhost:32807', req_timeout: int = 1) -> float:
     try:
         r = requests.get('http://' + vnf_monitoring_IP_port + '/states/10', timeout=req_timeout)
         avg_loads = []
@@ -115,7 +115,7 @@ if __name__ == '__main__':
     print('Welcome ! This is our wonderful General Controller. He monitors (almost) everything !')
     print('Press Ctrl+{0} to exit'.format('Break' if os.name == 'nt' else 'C'))
     print('Deploying monitoring VNF...')
-    deploy_vnf_monitoring()
+    # deploy_vnf_monitoring()
 
     scheduler = BlockingScheduler()
     # Main monitor runs every 3 seconds
