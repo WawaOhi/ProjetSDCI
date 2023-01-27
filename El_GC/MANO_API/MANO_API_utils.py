@@ -31,22 +31,51 @@ def deploy_vnf(
 
     my_url = BASE_URL + 'compute/' + datacenter_name + '/' + vnf_name
     # Send PUT request to vim-emu to deploy vnf
-    r = requests.put(my_url, headers=headers, json=json_data)
-    return r.json()
+    try:
+        r = requests.put(my_url, headers=headers, json=json_data)
+        return r.json()
+    except requests.exceptions.Timeout:
+        print(f'ERROR: timeout during deploy request')
+        print('You should check that vim-emu works correctly !')
+    except requests.exceptions.TooManyRedirects:
+        print('ERROR badURL')
+        print('You should check vim-emu API\'s IP')
+    except requests.exceptions.RequestException as e:
+        raise SystemExit(e)
 
 
 def test_vnf_deployment(
         vnf_name: str,
         datacenter_name: str = 'dc1') -> bool:
     my_url = BASE_URL + 'compute/' + datacenter_name + '/' + vnf_name
-    r = requests.get(my_url)
-    vnf_is_deployed = r.json().get('state').get('Running')
-    return vnf_is_deployed
+    try:
+        r = requests.get(my_url)
+        vnf_is_deployed = r.json().get('state').get('Running')
+        return vnf_is_deployed
+    except requests.exceptions.Timeout:
+        print(f'ERROR: timeout during deploy request')
+        print('You should check that vim-emu works correctly !')
+        return False
+    except requests.exceptions.TooManyRedirects:
+        print('ERROR badURL')
+        print('You should check vim-emu API\'s IP')
+        return False
+    except requests.exceptions.RequestException as e:
+        raise SystemExit(e)
 
 
 def delete_vnf(
         vnf_name: str,
         datacenter_name: str = 'dc1'):
     my_url = BASE_URL + 'compute/' + datacenter_name + '/' + vnf_name
-    r = requests.delete(my_url)
-    return r
+    try:
+        r = requests.delete(my_url)
+        return r
+    except requests.exceptions.Timeout:
+        print(f'ERROR: timeout during deploy request')
+        print('You should check that vim-emu works correctly !')
+    except requests.exceptions.TooManyRedirects:
+        print('ERROR badURL')
+        print('You should check vim-emu API\'s IP')
+    except requests.exceptions.RequestException as e:
+        raise SystemExit(e)

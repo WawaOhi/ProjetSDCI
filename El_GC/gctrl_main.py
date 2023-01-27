@@ -11,10 +11,11 @@ from SDNctrl_API.SDNctrl_API_utils import redirect_traffic, undo_redirect_traffi
 
 def check_gi_ping(vnf_monitoring_IP_port: str = 'localhost:5000', req_timeout: int = 1) -> float:
     try:
-        r = requests.get(vnf_monitoring_IP_port + '/pings/10', timeout=req_timeout)
+        r = requests.get('http://' + vnf_monitoring_IP_port + '/pings/10', timeout=req_timeout)
         elapsed_times = []
         for ping in list(r.json()):
-            time = ping.get('ping_req_elapsed_time_s', default=1)
+            print(f'PING WAS{ping}')
+            time = ping.get('ping_req_elapsed_time_s', 1)
             elapsed_times.append(time)
         avg_elapsed_time = statistics.mean(elapsed_times)
         return avg_elapsed_time
@@ -32,10 +33,10 @@ def check_gi_ping(vnf_monitoring_IP_port: str = 'localhost:5000', req_timeout: i
 
 def check_gi_states(vnf_monitoring_IP_port: str = 'localhost:5000', req_timeout: int = 1) -> float:
     try:
-        r = requests.get(vnf_monitoring_IP_port + '/states/10', timeout=req_timeout)
+        r = requests.get('http://' + vnf_monitoring_IP_port + '/states/10', timeout=req_timeout)
         avg_loads = []
         for state in list(r.json()):
-            avg_load = state.get('avgLoad', default=1)
+            avg_load = state.get('avgLoad', 1)
             avg_loads.append(avg_load)
         avg_avg_load = statistics.mean(avg_loads)
         return avg_avg_load
@@ -57,6 +58,8 @@ def deploy_vnf_adapt():
     while not vnf_is_deployed:
         deploy_vnf(vnf_name='vnf_adapt', vnf_img_name='vnf:adaptation', vnf_ip_output='10.0.0.21/24')
         vnf_is_deployed = test_vnf_deployment(vnf_name='vnf_adapt')
+        if vnf_is_deployed:
+            print('VNF successfully deployed !')
     redirect_traffic()
 
 
@@ -66,6 +69,8 @@ def shutdown_vnf_adapt():
     while vnf_is_deployed:
         delete_vnf(vnf_name='vnf_adapt')
         vnf_is_deployed = test_vnf_deployment(vnf_name='vnf_adapt')
+        if not vnf_is_deployed:
+            print('VNF was successfully shut down !')
     undo_redirect_traffic()
 
 
@@ -73,20 +78,24 @@ def main_monitor_adapt(avg_load_threshold: float = 0.9, avg_elapsed_time_thresho
     print('We are in main_monitor! The time is: %s' % datetime.now())
     avg_elapsed_time = check_gi_ping()
     avg_load = check_gi_states()
-    if (avg_elapsed_time > avg_elapsed_time_threshold) or (avg_load_threshold > avg_load_threshold):
+    print(
+        f'The average response time of the GI (10 last seconds) is {avg_elapsed_time} (threshold : {avg_elapsed_time_threshold})')
+    print(f'The average of average loads of the GI (10 last seconds) is {avg_load} (threshold : {avg_load_threshold})')
+    if (avg_elapsed_time > avg_elapsed_time_threshold) or (avg_load > avg_load_threshold):
+        print('One of the threshold is exceeded ! Deploying vnf...')
         deploy_vnf_adapt()
+
     else:
+        print('Everything is ok ! GC will ensure that vnf is down...')
         shutdown_vnf_adapt()
-    # TODO shutdown vnf if going back to normal
-    print(f'')
 
 
 if __name__ == '__main__':
+    print('Welcome ! This is our wonderful General Controller. He monitors (almost) everything !')
+    print('Press Ctrl+{0} to exit'.format('Break' if os.name == 'nt' else 'C'))
     scheduler = BlockingScheduler()
     # Main monitor runs every 3 seconds
     scheduler.add_job(main_monitor_adapt(), 'interval', seconds=3)
-    print('Welcome ! This is our wonderful General Controller. He monitors (almost) everything !')
-    print('Press Ctrl+{0} to exit'.format('Break' if os.name == 'nt' else 'C'))
 
     try:
         scheduler.start()
