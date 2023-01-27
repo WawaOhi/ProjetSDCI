@@ -53,7 +53,7 @@ def test_vnf_deployment(
         print(f'DEBUG')
         r_json = r.json()
         print(f'DEBUG{r_json}')
-        if r_json:
+        if r_json is not None:
             return r_json.get('state', None).get('Running', False)
         else:
             return False
