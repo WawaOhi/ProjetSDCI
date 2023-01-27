@@ -52,7 +52,7 @@ def test_vnf_deployment(
         r = requests.get(my_url)
         print(f'DEBUG')
         r_json = r.json()
-        print(f'DEBUG{r_json}')
+        # print(f'DEBUG{r_json}')
         # if r_json is not None:
         #     return r_json.get('state', None).get('Running', False)
         # else:
