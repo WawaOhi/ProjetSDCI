@@ -50,8 +50,9 @@ def test_vnf_deployment(
     my_url = BASE_URL + 'compute/' + datacenter_name + '/' + vnf_name
     try:
         r = requests.get(my_url)
+        print(f'DEBUG')
         r_json = r.json()
-        print(r_json)
+        print(f'DEBUG{r_json}')
         if isinstance(r_json, dict):
             return r_json.get('state', None).get('Running', False)
         else:
