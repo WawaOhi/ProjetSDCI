@@ -52,8 +52,12 @@ def test_vnf_deployment(
         r = requests.get(my_url)
         r_json = r.json()
         print(f'DEBUG {r_json}')
-        vnf_is_deployed = r_json.get('state').get('Running')
-        return vnf_is_deployed
+        vnf_is_deployed = r_json.get('state', None)
+        if vnf_is_deployed:
+            return vnf_is_deployed.get('Running', False)
+        else:
+            return False
+
     except requests.exceptions.Timeout:
         print(f'ERROR: timeout during deploy request')
         print('You should check that vim-emu works correctly !')
