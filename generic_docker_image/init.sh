@@ -13,6 +13,8 @@ sendPeriod=`cat $iam.json | jq -r '.sendPeriod'`
 remoteIp=`cat $iam.json | jq -r '.remoteIp'`
 remoteName=`cat $iam.json | jq -r '.remoteName'`
 
+cat codeURL
+
 #Type de composant utiisé. 
 type=`cat $iam.json | jq -r '.type'`
 
