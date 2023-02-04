@@ -1,1 +1,1 @@
-curl -X PUT http://127.0.0.1:5001/restapi/compute/dc1/vnf_moni -H 'Content-Type: application/json' -d '{"image":"vnf:monitoring", "network":"(id=input,ip=10.0.0.20/24)"}'
+curl -X PUT http://127.0.0.1:5001/restapi/compute/dc1/vnf_moni -H 'Content-Type: application/json' -d '{"image":"vnf:monitoring", "network":"(id=input,ip=10.0.0.20/24)","ports":[{"host": 8484,"container":5000}]}'
